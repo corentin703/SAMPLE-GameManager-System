@@ -2,16 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager, MonoBehaviour>
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum EndWay
+    {
+        Win,
+        Loose
+    }
+
+    public string[] Scenes;
+
+    public void LoadScene(string sceneName)
+    {
+        
+    }
+    
+    
+    public void GamePause()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GameResume()
+    {
+        
+    }
+
+    public void GameStart()
+    {
+        
+    }
+
+    public void EndGame(EndWay endWay)
     {
         
     }

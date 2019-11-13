@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MGR_Gameplay : MonoBehaviour
+public class MGR_Gameplay : Singleton<MGR_Gameplay, MonoBehaviour>
 {
-    // Start is called before the first frame update
-    void Start()
+    [System.Serializable]
+    public struct SBonus
     {
-        
+        public string name;
+        public int bonus;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool IsSettingUp { get; private set; } = false;
+
+    private Dictionary<string, int> m_dictBonus;
+
+
+    public void SetUp(Object player)
     {
-        
+        IsSettingUp = true;
     }
+    
+
 }

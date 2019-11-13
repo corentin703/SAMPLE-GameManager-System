@@ -4,14 +4,53 @@ using UnityEngine;
 
 public class MGR_TimeLine : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private enum ETLEventType
+    {
+        Start,
+        Stop,
+    }
+
+    private List<ITLEvent> m_events;
+    
+    public float Chrono { get; private set; }
+    public bool IsChronoStarted { get; private set; }
+    public bool IsChronoPaused { get; private set; }
+
+    public float MaxGameDuration = 15 * 60;
+
+    public bool IsSettingUp { get; private set; } = false;
+        
+    public void SetUp()
+    {
+        IsSettingUp = true;
+    }
+
+    public void ChronoStart()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChronoPause()
+    {
+        
+    }
+
+    public void ChronoStop()
+    {
+        
+    }
+
+    public void ChronoEnd()
+    {
+        
+    }
+
+    private void BuildTimeLine()
+    {
+        
+    }
+
+    private void testChronoEnd()
     {
         
     }
