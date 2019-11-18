@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MGR_TimeLine : MonoBehaviour
+public class MGR_TimeLine : Singleton<MGR_TimeLine>
 {
     private enum ETLEventType
     {

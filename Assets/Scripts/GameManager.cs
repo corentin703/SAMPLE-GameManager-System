@@ -66,29 +66,36 @@ public class GameManager : Singleton<GameManager>
     
     public void LoadScene(string sceneName)
     {
-        if (m_listScenes.Contains(name))
-            SceneManager.LoadScene(name);
+        if (m_listScenes.Contains(sceneName) || m_dictEndScenes.ContainsValue(sceneName))
+            SceneManager.LoadScene(sceneName);
         else
             throw new Exception("[GameManager] Scene reference error");
     }
 
     public void GamePause()
     {
-        
+        MGR_TimeLine.Instance.ChronoPause();
     }
 
     public void GameResume()
     {
-        
+        MGR_TimeLine.Instance.ChronoResume();
     }
 
     public void GameStart()
     {
-        
+        MGR_TimeLine.Instance.ChronoStart();
     }
 
     public void EndGame(EndWay endWay)
     {
+//        MGR_TimeLine.Instance.ChronoStop(); // TODO: Modifier selon les cas à déterminer (pas rappeler ça si la fonction EndGame a été appelée par le MGT_TimeLine)
         
+        LoadScene(m_dictEndScenes[endWay]);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
