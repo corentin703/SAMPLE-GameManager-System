@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class MGR_UI : Singleton<MGR_UI>
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool IsSettingUp { get; private set; } = false;
+    
+    public void SetUp()
     {
-        
+        IsSettingUp = true;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+    
+    // TODO: Define your UI's fonctions here 
 }

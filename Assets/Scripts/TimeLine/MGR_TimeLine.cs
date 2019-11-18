@@ -47,11 +47,59 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
 
     public bool IsSetUp { get; private set; } = false;
         
-    public void SetUp()
+    public void SetUp(ATLEvent[] events)
     {
+        m_events = new List<STLEvent>();
+        m_runningEvents = new List<ATLEvent>();
+        
+        BuildTimeLine(events);
+        
         IsSetUp = true;
     }
 
+    private void BuildTimeLine(ATLEvent[] events)
+    {
+        foreach (ATLEvent evt in events)
+        {
+            if (evt.IsPeriodic)
+            {
+                float startTime = evt.StartTime;
+                float endTime = evt.StartTime + evt.Duration;
+
+                while (endTime < evt.EndTime)
+                {
+                    buildTLEventPair(startTime, endTime, evt);
+
+                    startTime = endTime + evt.Period;
+                    endTime = startTime + evt.Duration;
+                }
+            }
+            else
+                buildTLEventPair(evt.StartTime, evt.EndTime, evt);
+        }
+    }
+
+    private void buildTLEventPair(float startTime, float endTimen, ATLEvent evt)
+    {
+        m_events.Add(new STLEvent(evt.StartTime, ETLEventType.Start, evt));
+        m_events.Add(new STLEvent(evt.EndTime, ETLEventType.Stop, evt));   
+    }
+
+    private void Update()
+    {
+        if (testChronoEnd())
+        {
+            ChronoStop();
+            GameManager.Instance.EndGame(GameManager.EndWay.Loose);
+        }
+            
+    }
+
+    private bool testChronoEnd()
+    {
+        return Chrono >= MaxGameDuration;
+    }
+    
     public void ChronoStart()
     {
         foreach (ATLEvent evt in m_runningEvents)
@@ -83,37 +131,5 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             evt.NotifyChronoStop();
         }
     }
-
-    private void BuildTimeLine(ATLEvent[] events)
-    {
-        foreach (ATLEvent evt in events)
-        {
-            if (evt.IsPeriodic)
-            {
-                float startTime = evt.StartTime;
-                float endTime = evt.StartTime + evt.Duration;
-
-                while (endTime < evt.EndTime)
-                {
-                    buildTLEventPair(startTime, endTime, evt);
-
-                    startTime = endTime + evt.Period;
-                    endTime = startTime + evt.Duration;
-                }
-            }
-            else
-                buildTLEventPair(evt.StartTime, evt.EndTime, evt);
-        }
-    }
-
-    private void buildTLEventPair(float startTime, float endTimen, ATLEvent evt)
-    {
-        m_events.Add(new STLEvent(evt.StartTime, ETLEventType.Start, evt));
-        m_events.Add(new STLEvent(evt.EndTime, ETLEventType.Stop, evt));   
-    }
-
-    private bool testChronoEnd()
-    {
-        return Chrono >= MaxGameDuration;
-    }
+    
 }

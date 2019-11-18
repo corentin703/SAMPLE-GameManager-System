@@ -304,8 +304,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1833837133}
   - component: {fileID: 1833837132}
+  - component: {fileID: 1833837138}
+  - component: {fileID: 1833837137}
+  - component: {fileID: 1833837136}
+  - component: {fileID: 1833837135}
+  - component: {fileID: 1833837134}
   m_Layer: 0
-  m_Name: EGO-Main
+  m_Name: EGO-MGR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -339,3 +344,66 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1833837134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833837131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc158b17d04859644a02d61954456293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1833837135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833837131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff45c2440ca38c34bb606f09cb034110, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1833837136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833837131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083132a2a52e9674ca62e6725cdef0e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Songs: []
+  BackgoundSound: []
+  MaximumNAudioSource: 0
+--- !u!114 &1833837137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833837131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2c0ab377efc189449267b71e4f94d97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1833837138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833837131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfd9128013b20e348bbb17a9e3ef7892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

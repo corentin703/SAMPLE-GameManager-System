@@ -18,23 +18,9 @@ public class MGR_Song : Singleton<MGR_Song>
     private Dictionary<string, AudioClip> m_dictSong;
     private List<AudioSource> m_audioSource;
 
-    [SerializeField] private uint MaximumNAudioSource; 
-    
-//    private struct SBackgroundSong
-//    {
-//        public AudioClip Song;
-//        public bool IsPlaying;
-//
-//        public SBackgroundSong(AudioClip song, bool isPlaying)
-//        {
-//            Song = song;
-//            IsPlaying = isPlaying;
-//        }
-//    }
+    [SerializeField] private uint MaximumNAudioSource;
 
     private int m_currentBackgoundSoundIndex = 0;
-    
-//    private List<SBackgroundSong> m_backgroundSound;
 
     private AudioSource m_backgroundAudioSource;
 
@@ -43,7 +29,6 @@ public class MGR_Song : Singleton<MGR_Song>
         base.Awake();
         
         m_dictSong = new Dictionary<string, AudioClip>();
-//        m_backgroundSound = new List<SBackgroundSong>();
         m_audioSource = new List<AudioSource>();
         m_backgroundAudioSource = new AudioSource();
 
@@ -51,11 +36,6 @@ public class MGR_Song : Singleton<MGR_Song>
         {
             m_dictSong.Add(song.Name, song.Song);
         }
-
-//        foreach (AudioClip song in BackgoundSound)
-//        {
-//            m_backgroundSound.Add(new SBackgroundSong(song, false));
-//        }
     }
 
     void Update()
@@ -69,6 +49,12 @@ public class MGR_Song : Singleton<MGR_Song>
             else
                 m_currentBackgoundSoundIndex = 0;
         }
+    }
+    
+    public bool IsSettingUp { get; private set; } = false;
+    public void SetUp()
+    {
+        IsSettingUp = true;
     }
     
     public void PlaySound(string name, float delay = 0)

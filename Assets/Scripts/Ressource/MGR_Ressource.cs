@@ -17,16 +17,18 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
             Description = description;
         }
     }
-    
-    public bool IsSettingUp { get; private set; } = false;
-    
+
     private List<ARessource> m_ressources;
     private Dictionary<string, SRessourceInfo> m_dictRessourceInfos;
 
     private readonly SRessourceInfo _defaultRessourceInfo = new SRessourceInfo("Default", "Default");
     
+    public bool IsSettingUp { get; private set; } = false;
     public void SetUp(SRessourceInfo[] ressourceInfos)
     {
+        m_dictRessourceInfos = new Dictionary<string, SRessourceInfo>();
+        m_ressources = new List<ARessource>();
+        
         IsSettingUp = true;
     }
 
