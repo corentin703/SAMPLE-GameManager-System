@@ -36,14 +36,11 @@ public abstract class ARessource : MonoBehaviour
         private set { m_isPickableByObjectPicker = value; }
     }
     
-//  [SerializeField] private static bool m_number = true;
 //  TODO: Define a static var that represents the number of the class's instances for the inventory in ressource's child classes
     public abstract bool Number
     {
         get;
         protected set;
-//      get { return m_number; }
-//      protected set { m_number = value; }
 //  TODO: Getter and setter should be defined like that in child classes
     }
     
@@ -57,7 +54,9 @@ public abstract class ARessource : MonoBehaviour
     
     public void Pick()
     {
+        OnPick();
         
+        MGR_Ressource.Instance.AddItem(this);
     }
 
     public abstract void Add(int number);

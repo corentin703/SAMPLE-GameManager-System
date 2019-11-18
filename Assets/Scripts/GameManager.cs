@@ -54,6 +54,8 @@ public class GameManager : Singleton<GameManager>
             else
                 throw new Exception("[GameManager] Scene \"" + scene + "\" doen't exists");
         }
+        
+        DontDestroyOnLoad(this);
     }
     
     public void LoadScene(int sceneNum)
