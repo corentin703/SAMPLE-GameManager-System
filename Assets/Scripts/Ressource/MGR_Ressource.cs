@@ -8,11 +8,13 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
     [System.Serializable]
     public struct SRessourceInfo
     {
-        private string Name;
-        private string Description;
+        public string UniqueIdentifier;
+        public string Name;
+        public string Description;
 
-        public SRessourceInfo(string name, string description)
+        public SRessourceInfo(string uniqueIdentifier, string name, string description)
         {
+            UniqueIdentifier = uniqueIdentifier;
             Name = name;
             Description = description;
         }
@@ -21,7 +23,7 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
     private List<ARessource> m_ressources;
     private Dictionary<string, SRessourceInfo> m_dictRessourceInfos;
 
-    private readonly SRessourceInfo _defaultRessourceInfo = new SRessourceInfo("Default", "Default");
+    private readonly SRessourceInfo _defaultRessourceInfo = new SRessourceInfo("default", "Default", "Default");
     
     public bool IsSettingUp { get; private set; } = false;
     public void SetUp(SRessourceInfo[] ressourceInfos)
