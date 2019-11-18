@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MGR_UI : MonoBehaviour
+public class MGR_UI : Singleton<MGR_UI>
 {
     // Start is called before the first frame update
     void Start()

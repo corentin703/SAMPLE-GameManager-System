@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MGR_Ressource : Singleton<MGR_Ressource, MonoBehaviour>
+public class MGR_Ressource : Singleton<MGR_Ressource>
 {
     [System.Serializable]
     public struct SRessourceInfo
@@ -27,7 +27,6 @@ public class MGR_Ressource : Singleton<MGR_Ressource, MonoBehaviour>
     
     public void SetUp(SRessourceInfo[] ressourceInfos)
     {
-
         IsSettingUp = true;
     }
 

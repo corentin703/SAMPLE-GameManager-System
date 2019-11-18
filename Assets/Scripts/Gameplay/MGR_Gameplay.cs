@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MGR_Gameplay : Singleton<MGR_Gameplay, MonoBehaviour>
+public class MGR_Gameplay : Singleton<MGR_Gameplay>
 {
     [System.Serializable]
     public struct SBonus
