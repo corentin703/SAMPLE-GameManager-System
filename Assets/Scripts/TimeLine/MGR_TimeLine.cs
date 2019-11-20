@@ -45,6 +45,14 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         }
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        m_events = new List<STLEvent>();
+        m_runningEvents = new List<ATLEvent>();
+    }
+
     public bool IsSetUp { get; private set; } = false;
         
     public void SetUp(ATLEvent[] events)
@@ -55,6 +63,11 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         BuildTimeLine(events);
         
         IsSetUp = true;
+    }
+    
+    public void NotifySceneChanged()
+    {
+        IsSetUp = false;
     }
 
     private void BuildTimeLine(ATLEvent[] events)

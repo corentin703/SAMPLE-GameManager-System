@@ -25,13 +25,13 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
 
     private readonly SRessourceInfo _defaultRessourceInfo = new SRessourceInfo("default", "Default", "Default");
     
-    public bool IsSettingUp { get; private set; } = false;
+    public bool IsSetUp { get; private set; } = false;
     public void SetUp(SRessourceInfo[] ressourceInfos)
     {
         m_dictRessourceInfos = new Dictionary<string, SRessourceInfo>();
         m_ressources = new List<ARessource>();
         
-        IsSettingUp = true;
+        IsSetUp = true;
     }
 
     public bool IsBelonged(ARessource ressource)
@@ -57,7 +57,7 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
 
     public SRessourceInfo GetRessourceInfos(ARessource ressource)
     {
-        if (!IsSettingUp)
+        if (!IsSetUp)
             throw new Exception("[MGR_Ressource] Manager not set up correctly");
 
         if (m_dictRessourceInfos.ContainsKey(ressource.UniqueIdentifier))
@@ -65,6 +65,11 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
         
         Debug.LogWarning("[MGR_Ressource] Corresponding ressource didn't found: returning default informations");
         return _defaultRessourceInfo;
+    }
+    
+    public void NotifySceneChanged()
+    {
+        IsSetUp = false;
     }
     
 }

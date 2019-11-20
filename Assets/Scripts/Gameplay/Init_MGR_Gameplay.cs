@@ -9,7 +9,8 @@ public class Init_MGR_Gameplay : MonoBehaviour
     
     void Awake()
     {
-        MGR_Gameplay.Instance.SetUp(Player, Bonus);
+        if (MGR_Gameplay.Instance)
+            MGR_Gameplay.Instance.SetUp(Player, Bonus);
         
         Destroy(this);
     }

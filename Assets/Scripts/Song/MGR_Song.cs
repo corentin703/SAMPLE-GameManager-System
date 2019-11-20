@@ -14,8 +14,10 @@ public class MGR_Song : Singleton<MGR_Song>
 
     [SerializeField] private SSong[] Songs;
     [SerializeField] private AudioClip[] BackgoundSound;
-
+    
+    
     private Dictionary<string, AudioClip> m_dictSong;
+    private List<AudioClip> m_backgroundSound;
     private List<AudioSource> m_audioSource;
 
     [SerializeField] private uint MaximumNAudioSource;
@@ -29,32 +31,72 @@ public class MGR_Song : Singleton<MGR_Song>
         base.Awake();
         
         m_dictSong = new Dictionary<string, AudioClip>();
+        m_backgroundSound = new List<AudioClip>(BackgoundSound);
         m_audioSource = new List<AudioSource>();
-        m_backgroundAudioSource = new AudioSource();
+
+        m_backgroundAudioSource = gameObject.AddComponent<AudioSource>();
 
         foreach (SSong song in Songs)
         {
             m_dictSong.Add(song.Name, song.Song);
         }
     }
-
+    
     void Update()
     {
-        if (!m_backgroundAudioSource.isPlaying)
+        if (IsSetUp)
         {
-            m_backgroundAudioSource.clip = BackgoundSound[m_currentBackgoundSoundIndex];
+            if (!m_backgroundAudioSource.isPlaying)
+            {
+                m_backgroundAudioSource.clip = BackgoundSound[m_currentBackgoundSoundIndex];
 
-            if (m_currentBackgoundSoundIndex + 1 < BackgoundSound.Length)
-                m_currentBackgoundSoundIndex++;
-            else
-                m_currentBackgoundSoundIndex = 0;
+                if (m_currentBackgoundSoundIndex + 1 < BackgoundSound.Length)
+                    m_currentBackgoundSoundIndex++;
+                else
+                    m_currentBackgoundSoundIndex = 0;
+            }
         }
     }
     
-    public bool IsSettingUp { get; private set; } = false;
-    public void SetUp()
+    public bool IsSetUp { get; private set; } = false;
+    public void SetUp(MGR_Song.SSong[] songs, AudioClip[] backgroundSound)
     {
-        IsSettingUp = true;
+        if (songs == null)
+            throw new NullReferenceException("[MGR_Song] in SetUp: SSong[] is null");
+        else if (songs.Length > 0)
+        {
+            m_dictSong = new Dictionary<string, AudioClip>();
+        
+            foreach (SSong song in Songs)
+            {
+                m_dictSong.Add(song.Name, song.Song);
+            }
+        
+            foreach (SSong song in songs)
+            {
+                m_dictSong.Add(song.Name, song.Song);
+            }
+        }
+        
+        if (backgroundSound == null)
+            throw new NullReferenceException("[MGR_Song] in SetUp: AudioClip[] is null");
+        else if (backgroundSound.Length > 0)
+        {
+            m_backgroundSound = new List<AudioClip>(BackgoundSound);
+
+            foreach (AudioClip song in backgroundSound)
+            {
+                m_backgroundSound.Add(song);
+            }
+        }
+
+
+        IsSetUp = true;
+    }
+    
+    public void NotifySceneChanged()
+    {
+        IsSetUp = false;
     }
     
     public void PlaySound(string name, float delay = 0)
@@ -75,8 +117,8 @@ public class MGR_Song : Singleton<MGR_Song>
             if (MaximumNAudioSource == 0 || m_audioSource.Count <= MaximumNAudioSource)
             {
                 // Création d'un nouveau GO contenant un AudioSource
-                GameObject go = new GameObject("AudioSource" + (m_audioSource.Count + 1));
-                AudioSource newAudioSource = go.AddComponent<AudioSource>();
+                AudioSource newAudioSource;
+                makeAudioSource(out newAudioSource, "AudioSource" + (m_audioSource.Count + 1));
                 newAudioSource.clip = m_dictSong[name];
                 newAudioSource.PlayDelayed(delay);
 
@@ -84,10 +126,14 @@ public class MGR_Song : Singleton<MGR_Song>
             }
             else
                 throw new Exception("[MGR_Song] To many AudioSources in use");
-//                Debug.LogError("To many AudioSources in use");
         }
         else
             throw new Exception("[MGR_Song] Song reference error");
-//            Debug.LogError("Song not found");
+    }
+    
+    private void makeAudioSource(out AudioSource audioSource, string goName = "AudioSource")
+    {
+        GameObject go = new GameObject(goName);
+        audioSource = go.AddComponent<AudioSource>();
     }
 }

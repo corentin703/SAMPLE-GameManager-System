@@ -13,7 +13,7 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
         public int bonus;
     }
 
-    public bool IsSettingUp { get; private set; } = false;
+    public bool IsSetUp { get; private set; } = false;
 
     private Dictionary<string, int> m_dictBonus;
     
@@ -31,7 +31,7 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
         
         Player = player;
         
-        IsSettingUp = true;
+        IsSetUp = true;
     }
     
     public uint IncreaseScore(int bonus)
@@ -45,6 +45,11 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
             throw new Exception("[MGR_Gameplay] Undefined bonus type : " + strBonus);
 
         return IncreaseScore(m_dictBonus[strBonus]);
+    }
+
+    public void NotifySceneChanged()
+    {
+        IsSetUp = false;
     }
     
 }

@@ -31,9 +31,11 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
+        m_listScenes = new List<string>();
+        
         foreach (string scene in Scenes)
         {
-            if (SceneManager.GetSceneByName(scene).IsValid())
+            if (true)
             {
                 m_listScenes.Add(scene);
             }
@@ -57,21 +59,38 @@ public class GameManager : Singleton<GameManager>
         
         DontDestroyOnLoad(this);
     }
-    
+
     public void LoadScene(int sceneNum)
     {
         if (sceneNum >= m_listScenes.Count)
             throw new Exception("[GameManager] Scene reference error");
         
         LoadScene(m_listScenes[sceneNum]);
+        
+        notifyManagers(EManagerNotif.SceneChanged);
     }
     
     public void LoadScene(string sceneName)
     {
-        if (m_listScenes.Contains(sceneName) || m_dictEndScenes.ContainsValue(sceneName))
+        if (m_listScenes.Contains(sceneName))
+        {
             SceneManager.LoadScene(sceneName);
+            notifyManagers(EManagerNotif.SceneChanged);
+        }
+        else if (m_dictEndScenes.ContainsValue(sceneName))
+        {
+            SceneManager.LoadScene(sceneName);
+        }
         else
             throw new Exception("[GameManager] Scene reference error");
+    }
+
+    public void LoadNextScene()
+    {
+        if ((m_currentSceneIndex + 1) >= (m_listScenes.Count - 1))
+            LoadScene(m_currentSceneIndex + 1);
+        else
+            EndGame(EndWay.Win);
     }
 
     public void GamePause()
@@ -86,12 +105,15 @@ public class GameManager : Singleton<GameManager>
 
     public void GameStart()
     {
+//        LoadScene(m_listScenes[0]);
+        SceneManager.LoadScene(m_listScenes[0]);
+
         MGR_TimeLine.Instance.ChronoStart();
     }
 
     public void EndGame(EndWay endWay)
     {
-//        MGR_TimeLine.Instance.ChronoStop(); // TODO: Modifier selon les cas à déterminer (pas rappeler ça si la fonction EndGame a été appelée par le MGT_TimeLine)
+        MGR_TimeLine.Instance.ChronoStop();
         
         LoadScene(m_dictEndScenes[endWay]);
     }
@@ -99,5 +121,23 @@ public class GameManager : Singleton<GameManager>
     public void Quit()
     {
         Application.Quit();
+    }
+
+    private enum EManagerNotif
+    {
+        SceneChanged
+    }
+    private void notifyManagers(EManagerNotif managerNotif)
+    {
+        if (managerNotif == EManagerNotif.SceneChanged)
+        {
+            MGR_Gameplay.Instance.NotifySceneChanged();
+            MGR_Ressource.Instance.NotifySceneChanged();
+            MGR_Song.Instance.NotifySceneChanged();
+            MGR_TimeLine.Instance.NotifySceneChanged();
+            MGR_UI.Instance.NotifySceneChanged();
+        }
+        else
+            throw new Exception("[GameManager] that manager notification is not implemented");
     }
 }

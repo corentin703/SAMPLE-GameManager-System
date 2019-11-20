@@ -11,7 +11,7 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         if (Instance == null)
             Instance = (T)this;
-        else if (Instance != this)
+        else if (Instance != null)
         {
             throw new System.Exception("[Singleton] Trying to instantiate a second instance of a singleton class.");
         }
