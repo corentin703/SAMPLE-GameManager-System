@@ -210,6 +210,7 @@ MonoBehaviour:
   Songs: []
   BackgoundSound: []
   MaximumNAudioSource: 0
+  m_audioMixer: {fileID: 24100000, guid: 98be3b9cc91a1eb4db8009f058c0d04a, type: 2}
 --- !u!114 &1833837137
 MonoBehaviour:
   m_ObjectHideFlags: 0

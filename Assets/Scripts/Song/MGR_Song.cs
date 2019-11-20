@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MGR_Song : Singleton<MGR_Song>
 {
@@ -14,8 +15,7 @@ public class MGR_Song : Singleton<MGR_Song>
 
     [SerializeField] private SSong[] Songs;
     [SerializeField] private AudioClip[] BackgoundSound;
-    
-    
+
     private Dictionary<string, AudioClip> m_dictSong;
     private List<AudioClip> m_backgroundSound;
     private List<AudioSource> m_audioSource;
@@ -26,6 +26,8 @@ public class MGR_Song : Singleton<MGR_Song>
 
     private AudioSource m_backgroundAudioSource;
 
+    [SerializeField] private AudioMixer m_audioMixer;
+
     protected override void Awake()
     {
         base.Awake();
@@ -35,6 +37,7 @@ public class MGR_Song : Singleton<MGR_Song>
         m_audioSource = new List<AudioSource>();
 
         m_backgroundAudioSource = gameObject.AddComponent<AudioSource>();
+        m_backgroundAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("BackgroundGroup")[0];
 
         foreach (SSong song in Songs)
         {
@@ -46,7 +49,7 @@ public class MGR_Song : Singleton<MGR_Song>
     {
         if (IsSetUp)
         {
-            if (!m_backgroundAudioSource.isPlaying)
+            if (!m_backgroundAudioSource.isPlaying && BackgoundSound.Length != 0)
             {
                 m_backgroundAudioSource.clip = BackgoundSound[m_currentBackgoundSoundIndex];
 
@@ -118,8 +121,12 @@ public class MGR_Song : Singleton<MGR_Song>
             {
                 // Création d'un nouveau GO contenant un AudioSource
                 AudioSource newAudioSource;
-                makeAudioSource(out newAudioSource, "AudioSource" + (m_audioSource.Count + 1));
+                GameObject go = new GameObject("AudioSource" + (m_audioSource.Count + 1));
+                newAudioSource = go.AddComponent<AudioSource>();
                 newAudioSource.clip = m_dictSong[name];
+                
+                // Assignation du son au groupe "EffectsGroup" de l'AudioMixer
+                newAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("EffectsGroup")[0];
                 newAudioSource.PlayDelayed(delay);
 
                 m_audioSource.Add(newAudioSource);
@@ -129,11 +136,5 @@ public class MGR_Song : Singleton<MGR_Song>
         }
         else
             throw new Exception("[MGR_Song] Song reference error");
-    }
-    
-    private void makeAudioSource(out AudioSource audioSource, string goName = "AudioSource")
-    {
-        GameObject go = new GameObject(goName);
-        audioSource = go.AddComponent<AudioSource>();
     }
 }
