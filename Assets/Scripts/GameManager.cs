@@ -142,15 +142,10 @@ public class GameManager : Singleton<GameManager>
     
     public void NotifyManagers(EManagerNotif managerNotif)
     {
-        if (managerNotif == EManagerNotif.SceneChanged)
-        {
-            MGR_Gameplay.Instance.Notify(managerNotif);
-            MGR_Ressource.Instance.Notify(managerNotif);
-            MGR_Song.Instance.Notify(managerNotif);
-            MGR_TimeLine.Instance.Notify(managerNotif);
-            MGR_UI.Instance.Notify(managerNotif);
-        }
-        else
-            throw new Exception("[GameManager] that manager notification is not implemented");
+        MGR_Gameplay.Instance.Notify(managerNotif);
+        MGR_Ressource.Instance.Notify(managerNotif);
+        MGR_Song.Instance.Notify(managerNotif);
+        MGR_TimeLine.Instance.Notify(managerNotif);
+        MGR_UI.Instance.Notify(managerNotif);
     }
 }

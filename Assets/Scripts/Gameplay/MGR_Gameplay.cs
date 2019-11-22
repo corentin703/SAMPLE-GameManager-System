@@ -19,9 +19,9 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
     private Dictionary<string, int> m_dictBonus;
     
     public uint Score { get; private set; }
-    public RigidbodyFirstPersonController Player { get; private set; }
+    public GameObject Player { get; private set; }
 
-    public void SetUp(RigidbodyFirstPersonController player, SBonus[] bonus)
+    public void SetUp(GameObject player, SBonus[] bonus)
     {
         m_dictBonus = new Dictionary<string, int>();
         
@@ -31,6 +31,8 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
         }    
         
         Player = player;
+        
+        MGR_Song.Instance.SetUpPlayerAudio(player);
         
         IsSetUp = true;
     }

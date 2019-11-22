@@ -18,7 +18,7 @@ public class MGR_Song : Singleton<MGR_Song>
 
     private Dictionary<string, AudioClip> m_dictSong;
     private List<AudioClip> m_backgroundSound;
-    private List<AudioSource> m_audioSource;
+    private List<AudioSource> m_audioSources;
 
     [Tooltip("If set to 0, AudioSources number will be infinite")]
     [SerializeField] private uint MaximumNAudioSource;
@@ -29,13 +29,15 @@ public class MGR_Song : Singleton<MGR_Song>
 
     [SerializeField] private AudioMixer m_audioMixer;
 
+    private GameObject m_audioSourceParent;
+
     protected override void Awake()
     {
         base.Awake();
         
         m_dictSong = new Dictionary<string, AudioClip>();
         m_backgroundSound = new List<AudioClip>(BackgoundSound);
-        m_audioSource = new List<AudioSource>();
+        m_audioSources = new List<AudioSource>();
 
         m_backgroundAudioSource = gameObject.AddComponent<AudioSource>();
         m_backgroundAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("BackgroundGroup")[0];
@@ -93,26 +95,38 @@ public class MGR_Song : Singleton<MGR_Song>
                 m_backgroundSound.Add(song);
             }
         }
+        
+        if (m_audioSourceParent == null)
+            m_audioSourceParent = new GameObject("AudioSources");
 
         IsSetUp = true;
     }
 
-    public void SetUpPlayerAudioListener(GameManager player)
+    public void SetUpPlayerAudio(GameObject player)
     {
-        
+        if (player.GetComponentInChildren<AudioSource>())
+        {
+            player.GetComponentInChildren<AudioSource>().outputAudioMixerGroup =
+                m_audioMixer.FindMatchingGroups("PlayerGroup")[0];
+        }
+            
     }
     
     public void Notify(GameManager.EManagerNotif managerNotif)
     {
         if (managerNotif == GameManager.EManagerNotif.SceneChanged)
             IsSetUp = false;
+        else if (managerNotif == GameManager.EManagerNotif.GamePaused)
+            AudioListener.pause = true;
+        else if (managerNotif == GameManager.EManagerNotif.GameResumed)
+            AudioListener.pause = false;
     }
     
     public void PlaySound(string name, float delay = 0)
     {
         if (m_dictSong.ContainsKey(name))
         {
-            foreach (AudioSource audioSource in m_audioSource)
+            foreach (AudioSource audioSource in m_audioSources)
             {
                 if (!audioSource.isPlaying)
                 {
@@ -123,11 +137,12 @@ public class MGR_Song : Singleton<MGR_Song>
                 }
             }
 
-            if (MaximumNAudioSource == 0 || m_audioSource.Count <= MaximumNAudioSource)
+            if (MaximumNAudioSource == 0 || m_audioSources.Count <= MaximumNAudioSource)
             {
                 // Création d'un nouveau GO contenant un AudioSource
                 AudioSource newAudioSource;
-                GameObject go = new GameObject("AudioSource" + (m_audioSource.Count + 1));
+                GameObject go = new GameObject("AudioSource" + (m_audioSources.Count + 1));
+                go.transform.parent = m_audioSourceParent.transform;
                 newAudioSource = go.AddComponent<AudioSource>();
                 newAudioSource.clip = m_dictSong[name];
                 
@@ -135,7 +150,7 @@ public class MGR_Song : Singleton<MGR_Song>
                 newAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("EffectsGroup")[0];
                 newAudioSource.PlayDelayed(delay);
 
-                m_audioSource.Add(newAudioSource);
+                m_audioSources.Add(newAudioSource);
             }
             else
                 throw new Exception("[MGR_Song] To many AudioSources in use");

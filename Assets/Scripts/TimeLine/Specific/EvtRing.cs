@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvtFall : ATLEvent
+public class EvtRing : ATLEvent
 {
     public override void OnEventStart()
     {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        obj.name = "Sphere";
-        
-        Debug.Log("Created");
+        MGR_Song.Instance.PlaySound("ring");
     }
 
     public override void OnEventPause()
@@ -24,7 +21,6 @@ public class EvtFall : ATLEvent
 
     public override void OnEventStop()
     {
-        Destroy(GameObject.Find("Sphere"));
-        Debug.Log("Destroyed");
+        return;
     }
 }

@@ -62,7 +62,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         m_events = new List<STLEvent>();
         m_runningEvents = new List<ATLEvent>();
         
-        BuildTimeLine(events);
+        buildTimeLine(events);
         
         IsSetUp = true;
     }
@@ -77,7 +77,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             ChronoResume();
     }
 
-    private void BuildTimeLine(ATLEvent[] events)
+    private void buildTimeLine(ATLEvent[] events)
     {
         foreach (ATLEvent evt in events)
         {
@@ -85,15 +85,11 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             {
                 float startTime = evt.StartTime;
                 float endTime = evt.StartTime + evt.Duration;
-
-//                int count = 0;
+                
                 while (endTime < evt.EndTime)
                 {
                     buildTLEventPair(startTime, endTime, evt);
 
-//                    Debug.Log(count.ToString() + " Start " + startTime.ToString() + " end " + endTime.ToString());
-//                    count++;
-                    
                     startTime = endTime + ((evt.Period == 0) ? UnityEngine.Random.Range(2.0f, _maxGameDuration) : evt.Period);
                     endTime = startTime + evt.Duration;
                 }
@@ -114,7 +110,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         if (IsChronoStarted && !IsChronoPaused)
         {
             Chrono += Time.deltaTime;
-//            Debug.Log(Chrono);       
+  
             if (testChronoEnd())
             {
                 ChronoStop();
@@ -132,10 +128,16 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             if ((int)(Mathf.Round(Chrono * 10)) == (int)(Mathf.Round(evt.ActionTime * 10)))
             {
                 if (evt.TLEventType == ETLEventType.Start)
-                    evt.Event.Fire();
+                {
+                    evt.Event.OnEventStart();
+                    m_runningEvents.Add(evt.Event);
+                }
                 else if (evt.TLEventType == ETLEventType.Stop)
-                    evt.Event.Stop();
-
+                {
+                    evt.Event.OnEventStop();
+                    m_runningEvents.Remove(evt.Event);
+                }
+                
                 m_events.Remove(evt);
             }
         }
@@ -150,7 +152,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         foreach (ATLEvent evt in m_runningEvents)
         {
-            evt.Fire();
+            evt.OnEventStart();
         }
 
         IsChronoStarted = true;
@@ -160,9 +162,11 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         foreach (ATLEvent evt in m_runningEvents)
         {
-            evt.NotifyChronoPause();
+            evt.OnEventPause();
         }
 
+        Time.timeScale = 0;
+        
         IsChronoPaused = true;
     }
 
@@ -170,8 +174,10 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         foreach (ATLEvent evt in m_runningEvents)
         {
-            evt.NotifyChronoResume();
+            evt.OnEventResume();
         }
+        
+        Time.timeScale = 1;
         
         IsChronoPaused = false;
     }
@@ -180,7 +186,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         foreach (ATLEvent evt in m_runningEvents)
         {
-            evt.Stop();
+            evt.OnEventStop();
         }
         
         IsChronoStarted = false;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvtTititiTatata : MonoBehaviour
+public class Script : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

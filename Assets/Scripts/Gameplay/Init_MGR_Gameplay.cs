@@ -5,7 +5,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class Init_MGR_Gameplay : MonoBehaviour
 {
-    public RigidbodyFirstPersonController Player;
+    public GameObject Player;
     public MGR_Gameplay.SBonus[] Bonus;
     
     void Awake()

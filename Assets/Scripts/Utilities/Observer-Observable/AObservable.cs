@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class AObservable : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    protected List<IObserver> _observers;
+
+    public void RegisterObservator(IObserver observer)
     {
-        
+        _observers.Add(observer);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UnregisterObservator(IObserver observer)
     {
-        
+        _observers.Remove(observer);
+    }
+
+    public void NotifyObservers()
+    {
+        foreach (IObserver observer in _observers)
+        {
+            observer.OUpdate();
+        }
+    }
+
+    public void NotifyObserver(IObserver observer)
+    {
+        observer.OUpdate();
     }
 }

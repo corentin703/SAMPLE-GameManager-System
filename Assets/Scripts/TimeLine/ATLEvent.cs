@@ -42,39 +42,12 @@ public abstract class ATLEvent : MonoBehaviour
         private set { m_duration = value; }
     }
 
-    [SerializeField] private bool m_isPausable;
-    public bool IsPausable
-    {
-        get { return m_isPausable; }
-        private set { m_isPausable = value; }
-    }
-
-    public void Fire()
-    {
-        OnEventStart();
-    }
+    public abstract void OnEventStart();
     
-    public void NotifyChronoPause()
-    {
-        OnEventPause();
-    }
-
-    public void NotifyChronoResume()
-    {
-        OnEventResume();
-    }
-
-    public void Stop()
-    {
-        OnEventStop();
-    }
-
-    protected abstract void OnEventStart();
+    public abstract void OnEventPause();
     
-    protected abstract void OnEventPause();
+    public abstract void OnEventResume();
     
-    protected abstract void OnEventResume();
-    
-    protected abstract void OnEventStop();
+    public abstract void OnEventStop();
 
 }
