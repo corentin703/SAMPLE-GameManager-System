@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class MGR_TimeLine : Singleton<MGR_TimeLine>
 {
@@ -32,7 +33,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     public bool IsChronoStarted { get; private set; }
     public bool IsChronoPaused { get; private set; }
 
-    private float _maxGameDuration = 15 * 60;
+    [SerializeField]
+    private float _maxGameDuration = 1 * 60;
     public float MaxGameDuration
     {
         get { return _maxGameDuration; } 
@@ -65,9 +67,14 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         IsSetUp = true;
     }
     
-    public void NotifySceneChanged()
+    public void Notify(GameManager.EManagerNotif managerNotif)
     {
-        IsSetUp = false;
+        if (managerNotif == GameManager.EManagerNotif.SceneChanged)
+            IsSetUp = false;
+        else if (managerNotif == GameManager.EManagerNotif.GamePaused)
+            ChronoPause();
+        else if (managerNotif == GameManager.EManagerNotif.GameResumed)
+            ChronoResume();
     }
 
     private void BuildTimeLine(ATLEvent[] events)
@@ -79,11 +86,15 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
                 float startTime = evt.StartTime;
                 float endTime = evt.StartTime + evt.Duration;
 
+//                int count = 0;
                 while (endTime < evt.EndTime)
                 {
                     buildTLEventPair(startTime, endTime, evt);
 
-                    startTime = endTime + evt.Period;
+//                    Debug.Log(count.ToString() + " Start " + startTime.ToString() + " end " + endTime.ToString());
+//                    count++;
+                    
+                    startTime = endTime + ((evt.Period == 0) ? UnityEngine.Random.Range(2.0f, _maxGameDuration) : evt.Period);
                     endTime = startTime + evt.Duration;
                 }
             }
@@ -92,22 +103,44 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         }
     }
 
-    private void buildTLEventPair(float startTime, float endTimen, ATLEvent evt)
+    private void buildTLEventPair(float startTime, float endTime, ATLEvent evt)
     {
-        m_events.Add(new STLEvent(evt.StartTime, ETLEventType.Start, evt));
-        m_events.Add(new STLEvent(evt.EndTime, ETLEventType.Stop, evt));   
+        m_events.Add(new STLEvent(startTime, ETLEventType.Start, evt));
+        m_events.Add(new STLEvent(endTime, ETLEventType.Stop, evt));   
     }
 
     private void Update()
     {
-        if (testChronoEnd())
+        if (IsChronoStarted && !IsChronoPaused)
         {
-            ChronoStop();
-            GameManager.Instance.EndGame(GameManager.EndWay.Loose);
-        }
+            Chrono += Time.deltaTime;
+//            Debug.Log(Chrono);       
+            if (testChronoEnd())
+            {
+                ChronoStop();
+                GameManager.Instance.EndGame(GameManager.EndWay.Loose);
+            }
             
+            manageTimeLine();       
+        }
     }
 
+    private void manageTimeLine()
+    {
+        foreach (STLEvent evt in m_events.ToArray())
+        {
+            if ((int)(Mathf.Round(Chrono * 10)) == (int)(Mathf.Round(evt.ActionTime * 10)))
+            {
+                if (evt.TLEventType == ETLEventType.Start)
+                    evt.Event.Fire();
+                else if (evt.TLEventType == ETLEventType.Stop)
+                    evt.Event.Stop();
+
+                m_events.Remove(evt);
+            }
+        }
+    }
+    
     private bool testChronoEnd()
     {
         return Chrono >= MaxGameDuration;
@@ -117,8 +150,10 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         foreach (ATLEvent evt in m_runningEvents)
         {
-            evt.NotifyChronoStart();
+            evt.Fire();
         }
+
+        IsChronoStarted = true;
     }
 
     public void ChronoPause()
@@ -127,6 +162,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         {
             evt.NotifyChronoPause();
         }
+
+        IsChronoPaused = true;
     }
 
     public void ChronoResume()
@@ -135,14 +172,18 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         {
             evt.NotifyChronoResume();
         }
+        
+        IsChronoPaused = false;
     }
 
     public void ChronoStop()
     {
         foreach (ATLEvent evt in m_runningEvents)
         {
-            evt.NotifyChronoStop();
+            evt.Stop();
         }
+        
+        IsChronoStarted = false;
     }
     
 }

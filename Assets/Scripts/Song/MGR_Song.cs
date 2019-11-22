@@ -20,6 +20,7 @@ public class MGR_Song : Singleton<MGR_Song>
     private List<AudioClip> m_backgroundSound;
     private List<AudioSource> m_audioSource;
 
+    [Tooltip("If set to 0, AudioSources number will be infinite")]
     [SerializeField] private uint MaximumNAudioSource;
 
     private int m_currentBackgoundSoundIndex = 0;
@@ -93,13 +94,18 @@ public class MGR_Song : Singleton<MGR_Song>
             }
         }
 
-
         IsSetUp = true;
     }
-    
-    public void NotifySceneChanged()
+
+    public void SetUpPlayerAudioListener(GameManager player)
     {
-        IsSetUp = false;
+        
+    }
+    
+    public void Notify(GameManager.EManagerNotif managerNotif)
+    {
+        if (managerNotif == GameManager.EManagerNotif.SceneChanged)
+            IsSetUp = false;
     }
     
     public void PlaySound(string name, float delay = 0)

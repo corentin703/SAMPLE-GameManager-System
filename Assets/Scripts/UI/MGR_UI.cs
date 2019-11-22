@@ -11,9 +11,10 @@ public class MGR_UI : Singleton<MGR_UI>
         IsSetUp = true;
     }
     
-    public void NotifySceneChanged()
+    public void Notify(GameManager.EManagerNotif managerNotif)
     {
-        IsSetUp = false;
+        if (managerNotif == GameManager.EManagerNotif.SceneChanged)
+            IsSetUp = false;
     }
     
     // TODO: Define your UI's fonctions here 

@@ -67,9 +67,10 @@ public class MGR_Ressource : Singleton<MGR_Ressource>
         return _defaultRessourceInfo;
     }
     
-    public void NotifySceneChanged()
+    public void Notify(GameManager.EManagerNotif managerNotif)
     {
-        IsSetUp = false;
+        if (managerNotif == GameManager.EManagerNotif.SceneChanged)
+            IsSetUp = false;
     }
     
 }

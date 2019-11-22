@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 using Object = UnityEngine.Object;
 
 public class MGR_Gameplay : Singleton<MGR_Gameplay>
@@ -18,9 +19,9 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
     private Dictionary<string, int> m_dictBonus;
     
     public uint Score { get; private set; }
-    public Object Player { get; private set; }
+    public RigidbodyFirstPersonController Player { get; private set; }
 
-    public void SetUp(Object player, SBonus[] bonus)
+    public void SetUp(RigidbodyFirstPersonController player, SBonus[] bonus)
     {
         m_dictBonus = new Dictionary<string, int>();
         
@@ -47,9 +48,10 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
         return IncreaseScore(m_dictBonus[strBonus]);
     }
 
-    public void NotifySceneChanged()
+    public void Notify(GameManager.EManagerNotif managerNotif)
     {
-        IsSetUp = false;
+        if (managerNotif == GameManager.EManagerNotif.SceneChanged)
+            IsSetUp = false;
     }
     
 }

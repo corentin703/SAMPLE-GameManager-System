@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -67,7 +68,7 @@ public class GameManager : Singleton<GameManager>
         
         LoadScene(m_listScenes[sceneNum]);
         
-        notifyManagers(EManagerNotif.SceneChanged);
+        NotifyManagers(EManagerNotif.SceneChanged);
     }
     
     public void LoadScene(string sceneName)
@@ -75,7 +76,7 @@ public class GameManager : Singleton<GameManager>
         if (m_listScenes.Contains(sceneName))
         {
             SceneManager.LoadScene(sceneName);
-            notifyManagers(EManagerNotif.SceneChanged);
+            NotifyManagers(EManagerNotif.SceneChanged);
         }
         else if (m_dictEndScenes.ContainsValue(sceneName))
         {
@@ -95,17 +96,18 @@ public class GameManager : Singleton<GameManager>
 
     public void GamePause()
     {
-        MGR_TimeLine.Instance.ChronoPause();
+//        MGR_TimeLine.Instance.ChronoPause();
+        NotifyManagers(EManagerNotif.GamePaused);
     }
 
     public void GameResume()
     {
-        MGR_TimeLine.Instance.ChronoResume();
+//        MGR_TimeLine.Instance.ChronoResume();
+        NotifyManagers(EManagerNotif.GameResumed);
     }
 
     public void GameStart()
     {
-//        LoadScene(m_listScenes[0]);
         SceneManager.LoadScene(m_listScenes[0]);
 
         MGR_TimeLine.Instance.ChronoStart();
@@ -114,8 +116,16 @@ public class GameManager : Singleton<GameManager>
     public void EndGame(EndWay endWay)
     {
         MGR_TimeLine.Instance.ChronoStop();
-        
-        LoadScene(m_dictEndScenes[endWay]);
+
+        if (m_dictEndScenes.ContainsKey(endWay))
+            LoadScene(m_dictEndScenes[endWay]);
+        else
+        {
+//            throw new Exception("That endway isn't defined");
+            Debug.LogError("That endway isn't defined");
+            Quit();
+        }
+            
     }
 
     public void Quit()
@@ -123,19 +133,22 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    private enum EManagerNotif
+    public enum EManagerNotif
     {
-        SceneChanged
+        SceneChanged,
+        GamePaused,
+        GameResumed,
     }
-    private void notifyManagers(EManagerNotif managerNotif)
+    
+    public void NotifyManagers(EManagerNotif managerNotif)
     {
         if (managerNotif == EManagerNotif.SceneChanged)
         {
-            MGR_Gameplay.Instance.NotifySceneChanged();
-            MGR_Ressource.Instance.NotifySceneChanged();
-            MGR_Song.Instance.NotifySceneChanged();
-            MGR_TimeLine.Instance.NotifySceneChanged();
-            MGR_UI.Instance.NotifySceneChanged();
+            MGR_Gameplay.Instance.Notify(managerNotif);
+            MGR_Ressource.Instance.Notify(managerNotif);
+            MGR_Song.Instance.Notify(managerNotif);
+            MGR_TimeLine.Instance.Notify(managerNotif);
+            MGR_UI.Instance.Notify(managerNotif);
         }
         else
             throw new Exception("[GameManager] that manager notification is not implemented");
