@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,11 +36,20 @@ public abstract class ATLEvent : MonoBehaviour
     
     [ConditionalHide("m_isPeriodic", true)]
     [Tooltip("Define the duration between each period")]
-    [SerializeField] private float m_duration;
+    [SerializeField] private float m_duration = 1f;
     public float Duration
     {
         get { return m_duration; }
         private set { m_duration = value; }
+    }
+
+    protected void Awake()
+    {
+        if (EndTime <= 0)
+            throw new Exception("[" + this.GetType().Name + "] You can't set an end time <= 0: it's currently set to " + EndTime);
+        
+        if (IsPeriodic && m_duration <= 0f)
+            throw new Exception("[" + this.GetType().Name + "] You can't set a duration <= 0: it's currently set to " + m_duration);
     }
 
     public abstract void OnEventStart();

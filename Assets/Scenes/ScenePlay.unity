@@ -245,7 +245,6 @@ MonoBehaviour:
   m_isPeriodic: 0
   m_period: 0
   m_duration: 0
-  m_isPausable: 0
 --- !u!4 &197291656
 Transform:
   m_ObjectHideFlags: 0
@@ -273,7 +272,7 @@ GameObject:
   - component: {fileID: 239783138}
   - component: {fileID: 239783137}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -402,6 +401,7 @@ MonoBehaviour:
   Events:
   - {fileID: 1775205764}
   - {fileID: 1102027364}
+  - {fileID: 974296292}
 --- !u!114 &487193287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,16 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff32eb99ca59bfc44b380d70d04e42e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RessourceInfos:
-  - UniqueIdentifier: 
-    Name: 
-    Description: 
-  - UniqueIdentifier: 
-    Name: 
-    Description: 
-  - UniqueIdentifier: 
-    Name: 
-    Description: 
+  ResourceInfos: []
 --- !u!114 &487193289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,9 +553,57 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+--- !u!1 &974296291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 974296293}
+  - component: {fileID: 974296292}
+  m_Layer: 0
+  m_Name: EvtCube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &974296292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974296291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210fb42cd77967146b4752f27f98af13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_startTime: 0
+  m_endTime: 60
+  m_isPeriodic: 1
+  m_period: 0
+  m_duration: 1
+  cube: {fileID: 2096341450904186471, guid: 4e357bc7c950e7c46b30ff2532eec4a8, type: 3}
+--- !u!4 &974296293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974296291}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.7837977, y: -5.203781, z: 8.886934}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1102027363
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +638,6 @@ MonoBehaviour:
   m_isPeriodic: 1
   m_period: 5
   m_duration: 2
-  m_isPausable: 0
 --- !u!4 &1102027365
 Transform:
   m_ObjectHideFlags: 0
@@ -654,7 +692,6 @@ MonoBehaviour:
   m_isPeriodic: 1
   m_period: 2
   m_duration: 3
-  m_isPausable: 0
 --- !u!4 &1775205765
 Transform:
   m_ObjectHideFlags: 0

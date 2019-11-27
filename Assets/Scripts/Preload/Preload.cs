@@ -7,7 +7,7 @@ public class Preload : MonoBehaviour
     void Awake()
     {
         if (MGR_Gameplay.Instance 
-            && MGR_Ressource.Instance
+            && MGR_Resource.Instance
             && MGR_Song.Instance
             && MGR_TimeLine.Instance
             && MGR_UI.Instance)

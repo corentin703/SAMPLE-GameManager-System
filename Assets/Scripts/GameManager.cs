@@ -20,6 +20,13 @@ public class GameManager : Singleton<GameManager>
         public string SceneName;
     }
     
+    public enum EManagerNotif
+    {
+        SceneChanged,
+        GamePaused,
+        GameResumed,
+    }
+    
     [SerializeField] private string[] Scenes;
     [SerializeField] private SEndScene[] EndScenes;
 
@@ -133,17 +140,10 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    public enum EManagerNotif
-    {
-        SceneChanged,
-        GamePaused,
-        GameResumed,
-    }
-    
     public void NotifyManagers(EManagerNotif managerNotif)
     {
         MGR_Gameplay.Instance.Notify(managerNotif);
-        MGR_Ressource.Instance.Notify(managerNotif);
+        MGR_Resource.Instance.Notify(managerNotif);
         MGR_Song.Instance.Notify(managerNotif);
         MGR_TimeLine.Instance.Notify(managerNotif);
         MGR_UI.Instance.Notify(managerNotif);

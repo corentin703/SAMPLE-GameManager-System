@@ -19,4 +19,20 @@ public class MGR_UI : Singleton<MGR_UI>
     }
     
     // TODO: Define your UI's fonctions here 
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Debug.Log("Inventory listing:");
+            foreach (var VARIABLE in MGR_Resource.Instance.Resources)
+            {
+                Debug.Log("Name: " + VARIABLE.Name);
+                Debug.Log("Description: " + VARIABLE.Description);
+                Debug.Log("Next");
+            }
+        
+            Debug.Log("End");
+        }
+    }
 }
