@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
         GameStart,
         GamePaused,
         GameResumed,
-        GameEnd,
+        GameEnded,
     }
     
     [SerializeField] private string[] Scenes;
@@ -121,7 +121,7 @@ public class GameManager : Singleton<GameManager>
 
     public void EndGame(EndWay endWay)
     {
-        NotifyManagers(EManagerNotif.GameEnd);
+        NotifyManagers(EManagerNotif.GameEnded);
 
         if (m_dictEndScenes.ContainsKey(endWay))
             SceneManager.LoadScene(m_dictEndScenes[endWay]);

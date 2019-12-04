@@ -77,7 +77,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             ChronoPause();
         else if (managerNotif == GameManager.EManagerNotif.GameResumed)
             ChronoResume();
-        else if (managerNotif == GameManager.EManagerNotif.GameEnd)
+        else if (managerNotif == GameManager.EManagerNotif.GameEnded)
             ChronoStop();
     }
 
