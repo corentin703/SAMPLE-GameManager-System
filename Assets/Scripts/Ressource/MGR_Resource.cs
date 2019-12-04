@@ -50,7 +50,7 @@ public class MGR_Resource : Singleton<MGR_Resource>
         if (IsBelonged(resource))
             Resources.Remove(resource);
         else
-            Debug.LogError("[MGR_Ressource] Trying to remove an non belonged object");
+            Debug.LogError("[" + GetType().Name + "] Trying to remove an non belonged object");
     }
 
     public void Notify(GameManager.EManagerNotif managerNotif)

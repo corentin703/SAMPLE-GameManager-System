@@ -24,7 +24,7 @@ public class MGR_UI : Singleton<MGR_UI>
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Debug.Log("Inventory listing:");
+            Debug.Log("[" + GetType().Name + "] Inventory listing:");
             foreach (var VARIABLE in MGR_Resource.Instance.Resources)
             {
                 Debug.Log("Name: " + VARIABLE.Name);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,8 +24,10 @@ public class GameManager : Singleton<GameManager>
     public enum EManagerNotif
     {
         SceneChanged,
+        GameStart,
         GamePaused,
         GameResumed,
+        GameEnd,
     }
     
     [SerializeField] private string[] Scenes;
@@ -39,39 +42,37 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
+        bool error = false;
+        
         m_listScenes = new List<string>();
         
         foreach (string scene in Scenes)
         {
-            if (true)
-            {
-                m_listScenes.Add(scene);
-            }
-            else
-                throw new Exception("[GameManager] Scene \"" + scene + "\" doen't exists");
+            m_listScenes.Add(scene);
         }
 
         m_dictEndScenes = new Dictionary<EndWay, string>();
         foreach (SEndScene scene in EndScenes)
         {
-            if (SceneManager.GetSceneByName(scene.SceneName).IsValid())
+            if (m_dictEndScenes.ContainsKey(scene.Case))
             {
-                if (m_dictEndScenes.ContainsKey(scene.Case))
-                    throw new Exception("[GameManager] You can't assign more than one scene to a end game event");
-                    
-                m_dictEndScenes.Add(scene.Case, scene.SceneName);
+                Debug.LogError("[" + GetType().Name + "] You can't assign more than one scene to a end game event");
+                error = true;
             }
-            else
-                throw new Exception("[GameManager] Scene \"" + scene + "\" doen't exists");
+
+            m_dictEndScenes.Add(scene.Case, scene.SceneName);
         }
         
+        if (error)
+            Application.Quit();
+
         DontDestroyOnLoad(this);
     }
 
     public void LoadScene(int sceneNum)
     {
         if (sceneNum >= m_listScenes.Count)
-            throw new Exception("[GameManager] Scene reference error");
+            throw new Exception("[" + GetType().Name + "] Scene reference error");
         
         LoadScene(m_listScenes[sceneNum]);
         
@@ -90,7 +91,7 @@ public class GameManager : Singleton<GameManager>
             SceneManager.LoadScene(sceneName);
         }
         else
-            throw new Exception("[GameManager] Scene reference error");
+            throw new Exception("[" + GetType().Name + "] Scene reference error");
     }
 
     public void LoadNextScene()
@@ -103,36 +104,29 @@ public class GameManager : Singleton<GameManager>
 
     public void GamePause()
     {
-//        MGR_TimeLine.Instance.ChronoPause();
         NotifyManagers(EManagerNotif.GamePaused);
     }
 
     public void GameResume()
     {
-//        MGR_TimeLine.Instance.ChronoResume();
         NotifyManagers(EManagerNotif.GameResumed);
     }
-
+    
     public void GameStart()
     {
         SceneManager.LoadScene(m_listScenes[0]);
 
-        MGR_TimeLine.Instance.ChronoStart();
+        NotifyManagers(EManagerNotif.GameStart);
     }
 
     public void EndGame(EndWay endWay)
     {
-        MGR_TimeLine.Instance.ChronoStop();
+        NotifyManagers(EManagerNotif.GameEnd);
 
         if (m_dictEndScenes.ContainsKey(endWay))
-            LoadScene(m_dictEndScenes[endWay]);
+            SceneManager.LoadScene(m_dictEndScenes[endWay]);
         else
-        {
-//            throw new Exception("That endway isn't defined");
-            Debug.LogError("That endway isn't defined");
-            Quit();
-        }
-            
+            throw new Exception("[" + GetType().Name + "] That endway isn't defined");
     }
 
     public void Quit()

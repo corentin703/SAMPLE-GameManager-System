@@ -51,7 +51,7 @@ public abstract class AResource : MonoBehaviour
             Name = "Default";
             Description = "Default description";
             
-            Debug.LogWarning("InfoResource have not been set, Default have been taken");
+            Debug.LogWarning("[" + GetType().Name + "] in Awake -> InfoResource have not been set, Default have been taken");
         }
         else
         {

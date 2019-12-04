@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cube : AResource
+public class CapsuleLoose : AResource
 {
     private static int m_Number = 0;
 
@@ -19,7 +19,7 @@ public class Cube : AResource
     protected override void OnPick()
     {
         base.OnPick();
-        Debug.Log("[" + GetType().Name + "] Cube picked !");
-        GameManager.Instance.LoadNextScene();
+        Debug.Log("[" + GetType().Name + "] Capsule picked !");
+        GameManager.Instance.EndGame(GameManager.EndWay.Loose);
     }
 }

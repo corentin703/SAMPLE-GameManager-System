@@ -47,7 +47,7 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
         }
         else
         {
-            Debug.LogWarning("Attempting to use a ConditionalHideAttribute but no matching SourcePropertyValue found in object: " + condHAtt.ConditionalSourceField);
+            Debug.LogWarning("[" + GetType().Name + "] Attempting to use a ConditionalHideAttribute but no matching SourcePropertyValue found in object: " + condHAtt.ConditionalSourceField);
         }
  
         return enabled;

@@ -12,12 +12,12 @@ public class EvtCubeSpown : ATLEvent
         base.Awake();
         
         if (cube == null)
-            throw new Exception("Cube prefab is not set");
+            throw new Exception("[" + GetType().Name + "] in Awake -> Cube prefab is not set");
     }
 
     public override void OnEventStart()
     {
-        Debug.Log("Create cube ! Time: " + MGR_TimeLine.Instance.Chrono);
+        Debug.Log("[" + GetType().Name + "] Create cube ! Time: " + MGR_TimeLine.Instance.Chrono);
         Instantiate(cube);
     }
 

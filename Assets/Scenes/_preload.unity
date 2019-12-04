@@ -155,8 +155,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Scenes:
-  - ScenePlay
-  EndScenes: []
+  - Level1
+  - Level2
+  EndScenes:
+  - Case: 0
+    SceneName: SceneWin
+  - Case: 1
+    SceneName: SceneLoose
 --- !u!4 &1833837133
 Transform:
   m_ObjectHideFlags: 0

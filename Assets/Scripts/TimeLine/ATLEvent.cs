@@ -46,10 +46,10 @@ public abstract class ATLEvent : MonoBehaviour
     protected void Awake()
     {
         if (EndTime <= 0)
-            throw new Exception("[" + this.GetType().Name + "] You can't set an end time <= 0: it's currently set to " + EndTime);
+            throw new Exception("[" + this.GetType().Name + "] in Awake -> You can't set an end time <= 0: it's currently set to " + EndTime);
         
         if (IsPeriodic && m_duration <= 0f)
-            throw new Exception("[" + this.GetType().Name + "] You can't set a duration <= 0: it's currently set to " + m_duration);
+            throw new Exception("[" + this.GetType().Name + "] in Awake -> You can't set a duration <= 0: it's currently set to " + m_duration);
     }
 
     public abstract void OnEventStart();

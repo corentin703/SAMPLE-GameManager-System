@@ -9,7 +9,7 @@ public class EvtFall : ATLEvent
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         obj.name = "Sphere";
         
-        Debug.Log("Created");
+        Debug.Log("[" + GetType().Name + "] Created");
     }
 
     public override void OnEventPause()
@@ -25,6 +25,6 @@ public class EvtFall : ATLEvent
     public override void OnEventStop()
     {
         Destroy(GameObject.Find("Sphere"));
-        Debug.Log("Destroyed");
+        Debug.Log("[" + GetType().Name + "] Destroyed");
     }
 }

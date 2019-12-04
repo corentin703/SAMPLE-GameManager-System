@@ -68,7 +68,7 @@ public class MGR_Song : Singleton<MGR_Song>
     public void SetUp(MGR_Song.SSong[] songs, AudioClip[] backgroundSound)
     {
         if (songs == null)
-            throw new NullReferenceException("[MGR_Song] in SetUp: SSong[] is null");
+            throw new NullReferenceException("[" + GetType().Name + "] in SetUp -> No song were given");
         else if (songs.Length > 0)
         {
             m_dictSong = new Dictionary<string, AudioClip>();
@@ -85,7 +85,7 @@ public class MGR_Song : Singleton<MGR_Song>
         }
         
         if (backgroundSound == null)
-            throw new NullReferenceException("[MGR_Song] in SetUp: AudioClip[] is null");
+            throw new NullReferenceException("[" + GetType().Name + "] in SetUp -> No backgroundSound were given");
         else if (backgroundSound.Length > 0)
         {
             m_backgroundSound = new List<AudioClip>(BackgoundSound);
@@ -115,7 +115,10 @@ public class MGR_Song : Singleton<MGR_Song>
     public void Notify(GameManager.EManagerNotif managerNotif)
     {
         if (managerNotif == GameManager.EManagerNotif.SceneChanged)
+        {
+            m_audioSources.Clear(); // Suppression des références aux AudioSources créés dans la scnène précédente
             IsSetUp = false;
+        }
         else if (managerNotif == GameManager.EManagerNotif.GamePaused)
             AudioListener.pause = true;
         else if (managerNotif == GameManager.EManagerNotif.GameResumed)
@@ -153,9 +156,9 @@ public class MGR_Song : Singleton<MGR_Song>
                 m_audioSources.Add(newAudioSource);
             }
             else
-                throw new Exception("[MGR_Song] To many AudioSources in use");
+                throw new Exception("[" + GetType().Name + "] in PlaySong -> To many AudioSources in use");
         }
         else
-            throw new Exception("[MGR_Song] Song reference error");
+            throw new Exception("[" + GetType().Name + "] in PlaySong -> Song reference error");
     }
 }

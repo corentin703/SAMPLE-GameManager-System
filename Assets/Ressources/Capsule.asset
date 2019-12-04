@@ -10,5 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f6bf003d4040be4896d193bd409f9cb, type: 3}
-  m_Name: New A Info Ressource
+  m_Name: Capsule
   m_EditorClassIdentifier: 
+  Name: Capsule
+  Description: Une belle capsule

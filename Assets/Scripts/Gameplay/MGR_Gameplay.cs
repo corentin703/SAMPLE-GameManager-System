@@ -45,7 +45,7 @@ public class MGR_Gameplay : Singleton<MGR_Gameplay>
     public uint IncreaseScore(string strBonus)
     {
         if (!m_dictBonus.ContainsKey(strBonus))
-            throw new Exception("[MGR_Gameplay] Undefined bonus type : " + strBonus);
+            throw new Exception("[" + GetType().Name + "] in IncreaseScore -> Undefined bonus type : " + strBonus);
 
         return IncreaseScore(m_dictBonus[strBonus]);
     }

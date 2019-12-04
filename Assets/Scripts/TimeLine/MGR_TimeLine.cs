@@ -43,7 +43,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             if (!IsSetUp)
                 _maxGameDuration = value;
             else
-                throw new SystemException("[MGR_TimeLine] You can't define MaxGameDuration during game's execution");
+                throw new SystemException("[" + GetType().Name + "] You can't define MaxGameDuration during game's execution");
         }
     }
 
@@ -71,10 +71,14 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         if (managerNotif == GameManager.EManagerNotif.SceneChanged)
             IsSetUp = false;
+        else if (managerNotif == GameManager.EManagerNotif.GameStart)
+            ChronoStart();
         else if (managerNotif == GameManager.EManagerNotif.GamePaused)
             ChronoPause();
         else if (managerNotif == GameManager.EManagerNotif.GameResumed)
             ChronoResume();
+        else if (managerNotif == GameManager.EManagerNotif.GameEnd)
+            ChronoStop();
     }
 
     private void buildTimeLine(ATLEvent[] events)
@@ -156,6 +160,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         }
 
         IsChronoStarted = true;
+        
+        Debug.Log("[" + GetType().Name + "] Chrono started");
     }
 
     public void ChronoPause()
@@ -168,6 +174,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         Time.timeScale = 0;
         
         IsChronoPaused = true;
+        
+        Debug.Log("[" + GetType().Name + "] Chrono paused");
     }
 
     public void ChronoResume()
@@ -180,6 +188,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         Time.timeScale = 1;
         
         IsChronoPaused = false;
+        
+        Debug.Log("[" + GetType().Name + "] Chrono resumed");
     }
 
     public void ChronoStop()
@@ -190,6 +200,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         }
         
         IsChronoStarted = false;
+        
+        Debug.Log("[" + GetType().Name + "] Chrono stopped");
     }
     
 }
