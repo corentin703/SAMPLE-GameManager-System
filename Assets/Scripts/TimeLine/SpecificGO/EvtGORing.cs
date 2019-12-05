@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvtRing : ATLEvent
+public class EvtGORing : ATLEventGO
 {
     public override void OnEventStart()
     {

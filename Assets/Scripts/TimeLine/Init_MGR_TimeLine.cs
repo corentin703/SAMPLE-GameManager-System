@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Init_MGR_TimeLine : MonoBehaviour
 {
-    public ATLEvent[] Events;
+    public ATLEventGO[] Events;
     void Awake()
     {
         if (MGR_TimeLine.Instance)

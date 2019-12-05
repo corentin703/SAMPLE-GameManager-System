@@ -135,7 +135,8 @@ public class MGR_Song : Singleton<MGR_Song>
                 {
                     audioSource.clip = m_dictSong[name];
                     audioSource.PlayDelayed(delay);
-
+                    Debug.Log("[" + GetType().Name + "] Playing sound " + name);
+                    
                     return;
                 }
             }
@@ -152,6 +153,7 @@ public class MGR_Song : Singleton<MGR_Song>
                 // Assignation du son au groupe "EffectsGroup" de l'AudioMixer
                 newAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("EffectsGroup")[0];
                 newAudioSource.PlayDelayed(delay);
+                Debug.Log("[" + GetType().Name + "] Playing sound " + name);
 
                 m_audioSources.Add(newAudioSource);
             }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvtCubeSpown : ATLEvent
+public class EvtGOCubeSpown : ATLEventGO
 {
     [SerializeField] private GameObject cube;
 

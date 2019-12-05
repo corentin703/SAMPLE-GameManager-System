@@ -16,9 +16,9 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         public float ActionTime;
         public ETLEventType TLEventType;
-        public ATLEvent Event;
+        public ITLEvent Event;
 
-        public STLEvent(float actionTime, ETLEventType tlEventType, ATLEvent evt)
+        public STLEvent(float actionTime, ETLEventType tlEventType, ITLEvent evt)
         {
             ActionTime = actionTime;
             TLEventType = tlEventType;
@@ -27,7 +27,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     }
 
     private List<STLEvent> m_events;
-    private List<ATLEvent> m_runningEvents;
+    private List<ITLEvent> m_runningEvents;
     
     public float Chrono { get; private set; }
     public bool IsChronoStarted { get; private set; }
@@ -52,15 +52,15 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
         base.Awake();
         
         m_events = new List<STLEvent>();
-        m_runningEvents = new List<ATLEvent>();
+        m_runningEvents = new List<ITLEvent>();
     }
 
     public bool IsSetUp { get; private set; } = false;
         
-    public void SetUp(ATLEvent[] events)
+    public void SetUp(ATLEventGO[] events)
     {
         m_events = new List<STLEvent>();
-        m_runningEvents = new List<ATLEvent>();
+        m_runningEvents = new List<ITLEvent>();
         
         buildTimeLine(events);
         
@@ -81,29 +81,63 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             ChronoStop();
     }
 
-    private void buildTimeLine(ATLEvent[] events)
+    private void buildTimeLine(ATLEventGO[] events)
     {
-        foreach (ATLEvent evt in events)
+        foreach (ATLEventGO evt in events)
         {
-            if (evt.IsPeriodic)
-            {
-                float startTime = evt.StartTime;
-                float endTime = evt.StartTime + evt.Duration;
-                
-                while (endTime < evt.EndTime)
-                {
-                    buildTLEventPair(startTime, endTime, evt);
-
-                    startTime = endTime + ((evt.Period == 0) ? UnityEngine.Random.Range(2.0f, _maxGameDuration) : evt.Period);
-                    endTime = startTime + evt.Duration;
-                }
-            }
-            else
-                buildTLEventPair(evt.StartTime, evt.EndTime, evt);
+            AddEvent(evt, false);
         }
     }
+    
+    public void AddEvent(ITLEvent tlEvent, bool addElapsedTime = true)
+    {
+        if (tlEvent.IsPeriodic)
+        {
+            float startTime = tlEvent.StartTime + ((addElapsedTime) ? Chrono : 0);
+            float endTime = tlEvent.StartTime + tlEvent.Duration + ((addElapsedTime) ? Chrono : 0);
 
-    private void buildTLEventPair(float startTime, float endTime, ATLEvent evt)
+            while (endTime < tlEvent.EndTime + ((addElapsedTime) ? Chrono : 0))
+            {
+                buildTLEventPair(startTime, endTime, tlEvent);
+
+                startTime = endTime + ((tlEvent.Period == 0) ? UnityEngine.Random.Range(2.0f, tlEvent.EndTime + ((addElapsedTime) ? Chrono : 0)) : tlEvent.Period);
+                endTime = startTime + tlEvent.Duration;
+            }
+        }
+        else
+            buildTLEventPair(tlEvent.StartTime + ((addElapsedTime) ? Chrono : 0), tlEvent.EndTime+ ((addElapsedTime) ? Chrono : 0), tlEvent);
+        
+        Debug.Log("[" + GetType().Name + "] Event added");
+    }
+
+    public void RemoveEvent(ITLEvent tlEvent)
+    {
+        bool log = false;
+        
+        foreach (STLEvent evt in m_events.ToArray())
+        {
+            if (evt.Event.GetType() == tlEvent.GetType())
+            {
+                if (m_runningEvents.Contains(tlEvent))
+                {
+                    tlEvent.OnEventStop();
+                    m_runningEvents.Remove(tlEvent);
+                }
+
+                m_events.Remove(evt);
+
+                if (tlEvent is ATLEventGO)
+                    Destroy((ATLEventGO)tlEvent);
+
+                log = true;
+            }
+        }
+        
+        if (log)
+            Debug.Log("[" + GetType().Name + "] Event deleted");
+    }
+
+    private void buildTLEventPair(float startTime, float endTime, ITLEvent evt)
     {
         m_events.Add(new STLEvent(startTime, ETLEventType.Start, evt));
         m_events.Add(new STLEvent(endTime, ETLEventType.Stop, evt));   
@@ -116,11 +150,8 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
             Chrono += Time.deltaTime;
   
             if (testChronoEnd())
-            {
-                ChronoStop();
                 GameManager.Instance.EndGame(GameManager.EndWay.Loose);
-            }
-            
+
             manageTimeLine();       
         }
     }
@@ -151,10 +182,10 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
     {
         return Chrono >= MaxGameDuration;
     }
-    
+
     public void ChronoStart()
     {
-        foreach (ATLEvent evt in m_runningEvents)
+        foreach (ITLEvent evt in m_runningEvents)
         {
             evt.OnEventStart();
         }
@@ -166,7 +197,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
 
     public void ChronoPause()
     {
-        foreach (ATLEvent evt in m_runningEvents)
+        foreach (ITLEvent evt in m_runningEvents)
         {
             evt.OnEventPause();
         }
@@ -180,7 +211,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
 
     public void ChronoResume()
     {
-        foreach (ATLEvent evt in m_runningEvents)
+        foreach (ITLEvent evt in m_runningEvents)
         {
             evt.OnEventResume();
         }
@@ -194,7 +225,7 @@ public class MGR_TimeLine : Singleton<MGR_TimeLine>
 
     public void ChronoStop()
     {
-        foreach (ATLEvent evt in m_runningEvents)
+        foreach (ITLEvent evt in m_runningEvents)
         {
             evt.OnEventStop();
         }
