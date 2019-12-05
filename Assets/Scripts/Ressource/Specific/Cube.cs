@@ -20,6 +20,7 @@ public class Cube : AResource
 
     private void Awake()
     {
+        base.Awake();
         evt = new EvtLog(2, 20, true, 2, 3);
     }
 
