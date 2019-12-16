@@ -154,6 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 478128c974c4a6047998290c31ffa05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsStartMenuScene: 1
+  StartMenuSceneName: StartMenuScene
   Scenes:
   - Level1
   - Level2

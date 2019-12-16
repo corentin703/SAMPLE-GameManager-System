@@ -30,6 +30,10 @@ public class GameManager : Singleton<GameManager>
         GameEnded,
     }
     
+    [SerializeField] private bool IsStartMenuScene = false;
+    [ConditionalHide("IsStartMenuScene", true)]
+    [SerializeField] private string StartMenuSceneName;
+    
     [SerializeField] private string[] Scenes;
     [SerializeField] private SEndScene[] EndScenes;
 
@@ -114,9 +118,16 @@ public class GameManager : Singleton<GameManager>
     
     public void GameStart()
     {
-        SceneManager.LoadScene(m_listScenes[0]);
-
-        NotifyManagers(EManagerNotif.GameStart);
+        if (IsStartMenuScene)
+        {
+            SceneManager.LoadScene(StartMenuSceneName);
+            IsStartMenuScene = false;
+        }
+        else
+        {
+            SceneManager.LoadScene(m_listScenes[0]);
+            NotifyManagers(EManagerNotif.GameStart);
+        }
     }
 
     public void EndGame(EndWay endWay)
