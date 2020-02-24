@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Gameplay;
+using Ressource;
+using Song;
+using Timeline;
+using UI;
 using UnityEngine;
 
 public class Preload : MonoBehaviour
 {
     void Awake()
     {
-        if (MGR_Gameplay.Instance 
-            && MGR_Resource.Instance
-            && MGR_Song.Instance
-            && MGR_TimeLine.Instance
-            && MGR_UI.Instance)
+        if (GameplayManager.Instance 
+            && ResourceManager.Instance
+            && SongManager.Instance
+            && TimelineManager.Instance
+            && UIManager.Instance)
             GameManager.Instance.GameStart();
 
         Debug.developerConsoleVisible = true;

@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Gameplay;
+using Ressource;
+using Song;
+using Timeline;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -147,10 +149,10 @@ public class GameManager : Singleton<GameManager>
 
     public void NotifyManagers(EManagerNotif managerNotif)
     {
-        MGR_Gameplay.Instance.Notify(managerNotif);
-        MGR_Resource.Instance.Notify(managerNotif);
-        MGR_Song.Instance.Notify(managerNotif);
-        MGR_TimeLine.Instance.Notify(managerNotif);
-        MGR_UI.Instance.Notify(managerNotif);
+        GameplayManager.Instance.Notify(managerNotif);
+        ResourceManager.Instance.Notify(managerNotif);
+        SongManager.Instance.Notify(managerNotif);
+        TimelineManager.Instance.Notify(managerNotif);
+        UIManager.Instance.Notify(managerNotif);
     }
 }

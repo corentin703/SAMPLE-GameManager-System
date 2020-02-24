@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class StartMenuInteractions : MonoBehaviour
+namespace UI
 {
-    public void StartGame()
+    public class StartMenuInteractions : MonoBehaviour
     {
-        GameManager.Instance.GameStart();
+        public void StartGame()
+        {
+            GameManager.Instance.GameStart();
+        }
     }
 }

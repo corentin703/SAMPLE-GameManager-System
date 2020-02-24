@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Ressource;
+using Timeline;
+using Timeline.Specific;
 using UnityEngine;
 
 public class Cube : AResource
@@ -27,7 +30,7 @@ public class Cube : AResource
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
-            MGR_TimeLine.Instance.RemoveEvent(evt);
+            TimelineManager.Instance.RemoveEvent(evt);
     }
 
     protected override void OnPick()
@@ -35,6 +38,6 @@ public class Cube : AResource
         base.OnPick();
         Debug.Log("[" + GetType().Name + "] Cube picked !");
         
-        MGR_TimeLine.Instance.AddEvent(evt);
+        TimelineManager.Instance.AddEvent(evt);
     }
 }
